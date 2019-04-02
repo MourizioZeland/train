@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>Modifying Sentiment</title>
+</head>
+<body>
+<body bgcolor="#E6E6FA">
+<font color=black size=+3>Modifying Sentiment</font>
+
+<table>
+    <tr><td>Text to Save:</td></tr>
+    <tr>
+        <td colspan="3">
+        Add positive adjective:
+        <img Adjective src="http://findicons.com/files/icons/2776/android_icons/96/ic_question_mark.png" alt="question" title="Adjective: is a word naming an attribute of a noun, such as sweet, red, or technical."
+        width=20 />
+        <br>
+        <textarea cols=40 rows=3 id="textBox1" ></textarea>
+        <p>
+            <textarea id="textBox2" style="width:512px;height:256px"></textarea>
+        </td>
+    </tr>
+    <tr>
+        <td>Filename to Save As:</td>
+        <td><input id="inputFileNameToSaveAs"></input></td>
+        <td><button onclick="saveTextAsFile()">Save Text to File</button></td>
+    </tr>
+    <tr>
+        <td>Select a File to Load:</td>
+        <td><input type="file" id="fileToLoad"></td>
+        <td><button onclick="loadFileAsText()">Load Selected File</button><td>
+    </tr>
+</table>
+
+<script type='text/javascript'>
+
+function saveTextAsFile()
+{
+    var el;
+    var prefix = 'textBox';
+    for(var i = 0; el = document.getElementById(prefix + i); i++){
+        if (el != ""){
+            var textToWrite = document.getElementById("el").value;
+            var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+            var fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value;
+        }
+    }
+
+    var downloadLink = document.createElement("a");
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download File";
+    if (window.webkitURL != null)
+    {
+
+        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    }
+    else
+    {
+
+        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = "none";
+        document.body.appendChild(downloadLink);
+    }
+
+    downloadLink.click();
+}
+
+function destroyClickedElement(event)
+{
+    document.body.removeChild(event.target);
+}
+
+function loadFileAsText()
+{
+    var fileToLoad = document.getElementById("fileToLoad").files[0];
+
+    var fileReader = new FileReader();
+    fileReader.onload = function(fileLoadedEvent) 
+    {
+        var textFromFileLoaded = fileLoadedEvent.target.result;
+        document.getElementById("inputTextToSave").value = textFromFileLoaded;
+    };
+    fileReader.readAsText(fileToLoad, "UTF-8");
+}
+
+</script>
+<input type=reset value=Clear id="reset">
+</body>
+</html>
